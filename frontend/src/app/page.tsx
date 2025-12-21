@@ -48,8 +48,8 @@ export default function Home() {
         <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-6 mb-8 max-w-2xl w-full">
           <h2 className="text-lg font-semibold mb-3 text-slate-200">Backend Health Status</h2>
           <pre className="bg-slate-950 px-4 py-3 rounded-lg text-sm overflow-x-auto">
-            {health ? JSON.stringify(health, null, 2) : "Loading..."}
-          </pre>
+        {health ? JSON.stringify(health, null, 2) : "Loading..."}
+      </pre>
         </div>
         <div className="flex gap-4 flex-wrap justify-center">
           <Link
