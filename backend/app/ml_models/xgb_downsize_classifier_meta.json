@@ -1,0 +1,11 @@
+{
+  "model_version": "v0.1",
+  "trained_at": "2025-11-06T02:26:41.135283+00:00",
+  "train_size": 20,
+  "val_size": 5,
+  "validation_accuracy": 1.0,
+  "validation_precision_downsize": 1.0,
+  "validation_recall_downsize": 1.0,
+  "validation_f1_downsize": 1.0,
+  "training_runtime_sec": 0.06324410438537598
+}

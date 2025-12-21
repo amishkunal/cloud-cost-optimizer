@@ -1,0 +1,111 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+*.crt
+
+# AWS credentials (if stored locally)
+.aws/credentials
+.aws/config
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+llm_cache.db
+
+# ML Models (large binary files - optional, uncomment if you want to exclude)
+# backend/app/ml_models/*.joblib
+# backend/app/ml_models/*.pkl
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node.js (frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.next/
+out/
+build/
+dist/
+
+# Testing
+.coverage
+.nyc_output
+coverage/
+*.lcov
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Docker
+.dockerignore
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project-specific
+backend/test_load_model.py  # Remove if you want to keep test files
+requirements.txt/  # This appears to be a directory, not a file
+
