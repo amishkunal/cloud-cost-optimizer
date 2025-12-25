@@ -37,6 +37,9 @@ class Instance(Base):
     )
 
     metrics = relationship("Metric", back_populates="instance")
+    right_sizing_actions = relationship(
+        "RightSizingAction", back_populates="instance", cascade="all, delete-orphan"
+    )
 
 
 class Metric(Base):
@@ -51,3 +54,35 @@ class Metric(Base):
     network_out_bytes = Column(BigInteger)
 
     instance = relationship("Instance", back_populates="metrics")
+
+
+class RightSizingAction(Base):
+    """
+    Records a right-sizing action taken (or intended) for an instance.
+
+    This enables measuring *realized* outcomes by:
+    - tracking when a recommendation was applied
+    - verifying the EC2 instance type in AWS (DescribeInstances)
+    - later joining with billing (CUR/Cost Explorer) for realized savings
+    """
+
+    __tablename__ = "right_sizing_actions"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    instance_id = Column(Integer, ForeignKey("instances.id"), nullable=False, index=True)
+
+    cloud_provider = Column(String(16), nullable=False, default="aws")
+    cloud_instance_id = Column(String(64), nullable=False, index=True)
+    region = Column(String(32))
+
+    old_instance_type = Column(String(32))
+    new_instance_type = Column(String(32))
+
+    # pending -> verified | mismatch | error
+    status = Column(String(16), nullable=False, default="pending", index=True)
+    error_message = Column(String(512))
+
+    requested_at = Column(TIMESTAMP(timezone=True), server_default=text("NOW()"))
+    verified_at = Column(TIMESTAMP(timezone=True))
+
+    instance = relationship("Instance", back_populates="right_sizing_actions")

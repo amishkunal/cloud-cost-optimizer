@@ -50,3 +50,28 @@ class RecommendationOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class RightSizingActionCreate(BaseModel):
+    instance_id: int
+    new_instance_type: str
+    cloud_provider: str = "aws"
+    cloud_instance_id: Optional[str] = None
+    region: Optional[str] = None
+
+
+class RightSizingActionOut(BaseModel):
+    id: int
+    instance_id: int
+    cloud_provider: str
+    cloud_instance_id: str
+    region: Optional[str] = None
+    old_instance_type: Optional[str] = None
+    new_instance_type: Optional[str] = None
+    status: str
+    error_message: Optional[str] = None
+    requested_at: datetime
+    verified_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True

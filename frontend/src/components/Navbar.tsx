@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Server, Activity, BrainCircuit } from "lucide-react";
+import { Home, Server, Activity, BrainCircuit, CheckSquare } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -12,6 +12,7 @@ export default function Navbar() {
     { href: "/instances", label: "Instances", icon: Server },
     { href: "/recommendations", label: "Recommendations", icon: Activity },
     { href: "/analytics", label: "Analytics", icon: BrainCircuit },
+    { href: "/actions", label: "Actions", icon: CheckSquare },
   ];
 
   return (

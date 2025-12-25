@@ -245,6 +245,14 @@ export default function InstanceDetailPage() {
                 {instance.hourly_cost.toFixed(3)}
               </div>
             )}
+            <div>
+              <Link
+                href={`/actions?instance_id=${instance.id}`}
+                className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs transition-colors"
+              >
+                View Actions →
+              </Link>
+            </div>
           </div>
         </div>
 
