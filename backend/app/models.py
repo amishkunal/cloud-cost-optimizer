@@ -45,7 +45,7 @@ class Instance(Base):
 class Metric(Base):
     __tablename__ = "metrics"
 
-    id = Column(BigInteger, primary_key=True, index=True)
+    id = Column(BigInteger().with_variant(Integer, "sqlite"), primary_key=True, index=True)
     instance_id = Column(Integer, ForeignKey("instances.id"))
     timestamp = Column(TIMESTAMP(timezone=True), nullable=False)
     cpu_utilization = Column(Numeric(5, 2))
@@ -57,18 +57,9 @@ class Metric(Base):
 
 
 class RightSizingAction(Base):
-    """
-    Records a right-sizing action taken (or intended) for an instance.
-
-    This enables measuring *realized* outcomes by:
-    - tracking when a recommendation was applied
-    - verifying the EC2 instance type in AWS (DescribeInstances)
-    - later joining with billing (CUR/Cost Explorer) for realized savings
-    """
-
     __tablename__ = "right_sizing_actions"
 
-    id = Column(BigInteger, primary_key=True, index=True)
+    id = Column(BigInteger().with_variant(Integer, "sqlite"), primary_key=True, index=True)
     instance_id = Column(Integer, ForeignKey("instances.id"), nullable=False, index=True)
 
     cloud_provider = Column(String(16), nullable=False, default="aws")
@@ -78,7 +69,6 @@ class RightSizingAction(Base):
     old_instance_type = Column(String(32))
     new_instance_type = Column(String(32))
 
-    # pending -> verified | mismatch | error
     status = Column(String(16), nullable=False, default="pending", index=True)
     error_message = Column(String(512))
 

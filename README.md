@@ -5,7 +5,6 @@
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
 [![XGBoost](https://img.shields.io/badge/XGBoost-2.0-orange.svg)](https://xgboost.readthedocs.io/)
 
@@ -58,3 +57,22 @@ Cloud Cost Optimizer helps organizations reduce cloud infrastructure spending by
 - **DevOps Engineers** - Identify underutilized infrastructure
 - **Engineering Managers** - Make data-driven decisions about resource allocation
 - **Startups** - Reduce cloud costs without manual analysis
+
+## Development
+
+### Backend tests
+
+```bash
+cd backend
+pip install -r requirements.txt -r requirements-dev.txt
+pytest -q --cov=app --cov-report=term-missing
+```
+
+### Frontend checks
+
+```bash
+cd frontend
+npm ci
+npm run lint
+npm run build
+```
