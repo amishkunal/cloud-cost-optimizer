@@ -47,6 +47,7 @@ class RecommendationOut(BaseModel):
     projected_monthly_savings: float
     model_version: str
     reasons: List[str]
+    shap_reasons: Optional[List[str]] = None
 
     class Config:
         from_attributes = True

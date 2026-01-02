@@ -15,6 +15,7 @@ from ..db import get_db
 from ..llm.explanations import generate_explanation_for_recommendation
 from ..ml.features import compute_instance_features
 from ..ml.load_model import load_model
+from ..ml.shap_explain import top_k_reasons_for_downsize
 from ..schemas import RecommendationOut
 
 logger = logging.getLogger(__name__)
@@ -69,6 +70,7 @@ def list_recommendations(
     environment: str | None = Query(None, description="Filter by environment"),
     region: str | None = Query(None, description="Filter by region"),
     instance_type: str | None = Query(None, description="Filter by instance type"),
+    include_shap: bool = Query(False, description="Include top feature-contribution reasons (SHAP)"),
 ):
     """
     Get ML-driven recommendations for all instances.
@@ -110,6 +112,24 @@ def list_recommendations(
         # Make predictions
         predictions = model.predict(X)
         probabilities = model.predict_proba(X)
+
+        shap_reasons_by_idx = {}
+        if include_shap:
+            try:
+                downsize_idxs = []
+                for idx in range(len(X)):
+                    meta_row = meta_df.iloc[idx]
+                    avg_cpu = float(meta_row.get("avg_cpu", 0))
+                    avg_mem = float(meta_row.get("avg_mem", 0))
+                    if avg_cpu < 20 and avg_mem < 25:
+                        downsize_idxs.append(idx)
+                if downsize_idxs:
+                    X_down = X.iloc[downsize_idxs]
+                    reasons_list = top_k_reasons_for_downsize(model, X_down, top_k=3)
+                    for local_i, global_idx in enumerate(downsize_idxs):
+                        shap_reasons_by_idx[global_idx] = reasons_list[local_i]
+            except Exception:
+                shap_reasons_by_idx = {}
 
         # Build recommendations
         recommendations = []
@@ -172,6 +192,7 @@ def list_recommendations(
                 projected_monthly_savings=projected_savings,
                 model_version=model_version,
                 reasons=reasons,
+                shap_reasons=shap_reasons_by_idx.get(idx),
             )
 
             recommendations.append(recommendation)
