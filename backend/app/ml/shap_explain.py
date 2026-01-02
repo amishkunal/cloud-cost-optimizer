@@ -59,13 +59,35 @@ def top_k_reasons_for_downsize(
         raise ValueError("Pipeline is missing scaler/classifier steps")
 
     X_scaled = scaler.transform(X)
-    explainer = _get_explainer(classifier)
-    shap_values = explainer.shap_values(X_scaled)
-    sv = np.asarray(shap_values)
+    feature_names = list(X.columns)
+
+    sv = None
+    try:
+        explainer = _get_explainer(classifier)
+        shap_values = explainer.shap_values(X_scaled)
+
+        if hasattr(shap_values, "values"):
+            sv = np.asarray(shap_values.values)
+        elif isinstance(shap_values, (list, tuple)):
+            pick = shap_values[1] if len(shap_values) > 1 else shap_values[0]
+            sv = np.asarray(pick)
+        else:
+            sv = np.asarray(shap_values)
+    except Exception:
+        sv = None
+
+    # Fallback: use XGBoost's built-in contribution outputs (SHAP-style) if TreeExplainer fails.
+    if sv is None:
+        import xgboost as xgb
+
+        booster = classifier.get_booster() if hasattr(classifier, "get_booster") else classifier
+        dmat = xgb.DMatrix(X_scaled, feature_names=feature_names)
+        contrib = booster.predict(dmat, pred_contribs=True)
+        sv = np.asarray(contrib)[:, :-1]  # drop bias term
+
     if sv.ndim != 2:
         sv = sv.reshape(len(X), -1)
 
-    feature_names = list(X.columns)
     X_vals = X.to_numpy(dtype=float, copy=False)
 
     all_reasons: List[List[str]] = []

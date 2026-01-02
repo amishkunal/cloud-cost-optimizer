@@ -13,7 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.db import SessionLocal
-from app.models import Instance, Metric
+from app.models import Instance, Metric, RightSizingAction
 
 
 def generate_demo_data():
@@ -34,6 +34,7 @@ def generate_demo_data():
     try:
         # Delete existing data
         print("\n🗑️  Clearing existing data...")
+        db.query(RightSizingAction).delete()
         db.query(Metric).delete()
         db.query(Instance).delete()
         db.commit()
